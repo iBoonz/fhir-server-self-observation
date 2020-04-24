@@ -1,6 +1,6 @@
-# FHIR Server Samples
+# FHIR Server with Service Client application
 
-ALPHA! Need to add steps and info
+This repositories contains scripts to deploy a FHIR server, together with e Service Client application that can be used for Server to Server communication
 
 # Prerequisites
 
