@@ -138,11 +138,6 @@ if (!$application) {
     $application = Get-AzureAdApplication -Filter "identifierUris/any(uri:uri eq '$fhirServiceUrl')"
 }
 
-
-$secretConfidentialClientId = ConvertTo-SecureString $confidentialClient.AppId -AsPlainText -Force
-Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "$confidentialClientAppName-id" -SecretValue $secretConfidentialClientId| Out-Null
-Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "$confidentialClientAppName-secret" -SecretValue $secretSecureString | Out-Null
-
 # Create service client
 $serviceClientAppName = "${EnvironmentName}-service-client"
 $serviceClient = Get-AzureAdApplication -Filter "DisplayName eq '$serviceClientAppName'"

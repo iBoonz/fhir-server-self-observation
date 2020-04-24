@@ -58,31 +58,8 @@ if ($application) {
     Remove-FhirServerApplicationRegistration -AppId $application.AppId
 }
 
-
-$UserNamePrefix = "${EnvironmentName}-"
-$userId = "${UserNamePrefix}admin"
-$domain = $tenantInfo.TenantDomain
-$userUpn = "${userId}@${domain}"
-
-$aadUser = Get-AzureADUser -Filter "userPrincipalName eq '$userUpn'"
-if ($aadUser) {
-    Remove-AzureADUser -ObjectId $aadUser.ObjectId
-}
-
-$confidentialClientAppName = "${EnvironmentName}-confidential-client"
-$confidentialClient = Get-AzureAdApplication -Filter "DisplayName eq '$confidentialClientAppName'"
-if ($confidentialClient) {
-    Remove-FhirServerApplicationRegistration -AppId $confidentialClient.AppId
-}
-
 $serviceClientAppName = "${EnvironmentName}-service-client"
 $serviceClient = Get-AzureAdApplication -Filter "DisplayName eq '$serviceClientAppName'"
 if ($confidentialClient) {
     Remove-FhirServerApplicationRegistration -AppId $serviceClient.AppId
-}
-
-$publicClientAppName = "${EnvironmentName}-public-client"
-$publicClient = Get-AzureAdApplication -Filter "DisplayName eq '$publicClientAppName'"
-if ($publicClient) {
-    Remove-FhirServerApplicationRegistration -AppId $publicClient.AppId
 }

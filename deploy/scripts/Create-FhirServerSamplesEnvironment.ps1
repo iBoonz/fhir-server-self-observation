@@ -26,7 +26,7 @@ param
     [string]$FhirApiLocation = "westus2",
 
     [Parameter(Mandatory = $false)]
-    [string]$SourceRepository = "https://github.com/Microsoft/fhir-server-samples",
+    [string]$SourceRepository = "https://github.com/iBoonz/fhir-server-self-observation",
 
     [Parameter(Mandatory = $false)]
     [string]$SourceRevision = "master",
@@ -156,20 +156,17 @@ if (!$resourceGroup) {
     New-AzResourceGroup -Name $EnvironmentName -Location $EnvironmentLocation | Out-Null
 }
 
-# Making a separate resource group for SMART on FHIR apps, since Linux Container apps cannot live in a resource group with windows apps
-$sofResourceGroup = Get-AzResourceGroup -Name "${EnvironmentName}-sof" -ErrorAction SilentlyContinue
-if (!$sofResourceGroup) {
-    New-AzResourceGroup -Name "${EnvironmentName}-sof" -Location $EnvironmentLocation | Out-Null
-}
-
 # Deploy the template
-New-AzResourceGroupDeployment -TemplateUri $sandboxTemplate -environmentName $EnvironmentName -fhirApiLocation $FhirApiLocation -ResourceGroupName $EnvironmentName -fhirServerTemplateUrl $fhirServerTemplateUrl -fhirVersion $FhirVersion -sqlAdminPassword $SqlAdminPassword -aadAuthority $aadAuthority -aadServiceClientId $serviceClientId -aadServiceClientSecret $serviceClientSecret -fhirDashboardJSTemplateUrl  $DeploySource -usePaaS $UsePaaS -accessPolicies $accessPolicies
+New-AzResourceGroupDeployment -TemplateUri $sandboxTemplate -environmentName $EnvironmentName -fhirApiLocation $FhirApiLocation -ResourceGroupName $EnvironmentName -fhirServerTemplateUrl $fhirServerTemplateUrl -fhirVersion $FhirVersion -sqlAdminPassword $SqlAdminPassword -aadAuthority $aadAuthority -usePaaS $UsePaaS -accessPolicies $accessPolicies
 
 Write-Host "Warming up site..."
 Invoke-WebRequest -Uri "${fhirServerUrl}/metadata" | Out-Null
-$functionAppUrl = "https://${EnvironmentName}imp.azurewebsites.net"
-Invoke-WebRequest -Uri $functionAppUrl | Out-Null 
 
 @{
-    fhirServerUrl             = $fhirServerUrl
+    fhirServerUrl = $fhirServerUrl
+    clientId = $serviceClientId
+    clientSecret = $serviceClientSecret
+    accessTokenUrl = "https://login.microsoftonline.com/" + $azContext.Tenant.Id + "/oauth2/v2.0/token"
+    scope =  $fhirServerUrl + "/.default"
 }
+
