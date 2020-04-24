@@ -68,6 +68,7 @@ catch {
     throw "Please log in to Azure AD with Connect-AzureAD cmdlet before proceeding"
 }
 
+
 # Get current Az context
 try {
     $azContext = Get-AzContext
@@ -166,7 +167,7 @@ Invoke-WebRequest -Uri "${fhirServerUrl}/metadata" | Out-Null
     fhirServerUrl = $fhirServerUrl
     clientId = $serviceClientId
     clientSecret = $serviceClientSecret
-    accessTokenUrl = "https://login.microsoftonline.com/" + $azContext.Tenant.Id + "/oauth2/v2.0/token"
+    accessTokenUrl = "https://login.microsoftonline.com/" + $tenantInfo.TenantId + "/oauth2/v2.0/token"
     scope =  $fhirServerUrl + "/.default"
 }
 
