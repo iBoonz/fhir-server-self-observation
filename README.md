@@ -16,8 +16,8 @@ Install-Module AzureAd
 To deploy the sample scenario, first clone this git repo and find the deployment scripts folder:
 
 ```PowerShell
-git clone https://github.com/Microsoft/fhir-server-samples
-cd fhir-server-samples/deploy/scripts
+git clone https://github.com/iBoonz/fhir-server-self-observation
+cd fhir-server-self-observation/deploy/scripts
 ```
 
 Log into your Azure subscription:
